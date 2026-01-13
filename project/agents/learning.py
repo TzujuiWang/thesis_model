@@ -2,9 +2,9 @@ from typing import Dict, Any, List, Optional
 import numpy as np
 
 from .base import AgentBase, Order
-from 论文.project.learning.gp.tree import GPTreeFactory
-from 论文.project.learning.forecasting import ForecastingRule
-from 论文.project.learning.evolution import EvolutionaryEngine
+from project.learning.gp.tree import GPTreeFactory
+from project.learning.forecasting import ForecastingRule
+from project.learning.evolution import EvolutionaryEngine
 
 
 class LearningAgent(AgentBase):

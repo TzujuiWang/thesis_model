@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, NamedTuple
 import numpy as np
 
-from 论文.project.core.state import AccountState
-from 论文.project.preference.reservation_price import PolicyFactory, PolicyParams, ReservationPriceContext
+from project.core.state import AccountState
+from project.preference.reservation_price import PolicyFactory, PolicyParams, ReservationPriceContext
 
 
 class Order(NamedTuple):

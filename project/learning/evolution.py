@@ -30,6 +30,18 @@ class EvolutionaryEngine:
         # "parent_mean": use average variance of parents (Source 2 hint)
         self.init_strategy = config.get('new_rule_init', 'default')
 
+    def select_active_rule(self, rules: List[ForecastingRule]) -> ForecastingRule:
+        """
+        [Added Method] 从规则库中选择当前强度 (Strength) 最高的规则。
+        LearningAgent 在每个 Period 开始时调用此方法。
+        """
+        if not rules:
+            raise ValueError("No rules available to select.")
+
+        # Strength = -Variance (方差越小，强度越大)
+        # 直接返回强度最大的规则
+        return max(rules, key=lambda r: r.strength)
+
     def evolve_rules(self, rules: List[ForecastingRule]) -> List[ForecastingRule]:
         """Replace the worst rule in the list."""
         if len(rules) < 2: return rules

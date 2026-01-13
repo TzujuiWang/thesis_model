@@ -1,7 +1,7 @@
 import heapq
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple, Any
-from 论文.project.agents.base import Order
+from project.agents.base import Order
 
 
 @dataclass(order=False)

@@ -44,4 +44,4 @@ class ExperimentRunner:
 if __name__ == "__main__":
     runner = ExperimentRunner()
     # Example: Run Baseline B0
-    runner.run_scenario("B0")
+    runner.run_scenario("B9")

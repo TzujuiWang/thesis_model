@@ -23,7 +23,7 @@ class Timeline:
         self.rounds_per_period = rounds_per_period
 
         self.current_period = 1
-        self.current_round = 0  # 0=Settlement
+        self.current_round = -1  # 0=Settlement
         self.finished = False
 
     def step(self) -> Literal["settlement", "trading", "period_end", "finished"]:

@@ -1,0 +1,146 @@
+agents:
+  composition:
+    informed_share: 0.1
+    noise_share: 0.0
+    uninformed_share: 0.9
+  endowment:
+    initial_bonds: 2000
+    initial_shares: 1
+  population_total: 100
+  risk_aversion:
+    lambda: 0.5
+assets:
+  risk_free:
+    rf: 0.0004
+  risky_dividend_ar1:
+    D_bar: 0.01
+    initial_value: null
+    initialization_policy: steady_state_mean
+    mu_dist_param: 0.02
+    mu_param_type: std
+    rho: 0.95
+beliefs:
+  conditional_variance:
+    method: adaptive_variance
+    theta_1: 0.01
+    theta_2: 0.001
+  eq4_negative_log_variant: dai_abs_f_minus_1
+  forecasting_accuracy:
+    method: negative_squared_error
+  theta_0: 0.2
+learning_gp:
+  config:
+    evolution_cycle: 2
+    init_params:
+      const_prob: 0.2
+      const_range:
+      - -10.0
+      - 10.0
+      grow_terminate_prob: 0.4
+      max_depth: 4
+      method: ramped_half_and_half
+    learning_freq_range:
+    - 5
+    - 95
+    rules_per_trader: 2
+  evolution_probs:
+    crossover: 0.7
+    immigration: 0.1
+    mutation: 0.2
+  function_set:
+    functions:
+    - ifelse
+    - +
+    - '-'
+    - '*'
+    - /
+    - sqrt
+    - sin
+    - con
+    - abs
+  protected_ops:
+    div_epsilon: 1e-9
+    sqrt_robust: true
+  selection:
+    method: tournament
+    tournament_size: 2
+  terminal_set:
+    informed:
+    - P_t_1
+    - P_t_2
+    - P_t_3
+    - P_t_4
+    - P_t_5
+    - D_t
+    - D_t_1
+    - D_t_2
+    - D_t_3
+    - D_t_4
+    - D_t_5
+    - Pf_t
+    uninformed:
+    - P_t_1
+    - P_t_2
+    - P_t_3
+    - P_t_4
+    - P_t_5
+    - D_t_1
+    - D_t_2
+    - D_t_3
+    - D_t_4
+    - D_t_5
+    - Pf_t_1
+logging:
+  save_trade_tape: true
+  save_wealth_snapshots: true
+  snapshot_interval: 100
+market:
+  initial_best_ask: 25.25
+  initial_best_bid: 24.75
+  initial_price: 25
+  trade_unit: 1
+meta:
+  description: "\u51BB\u7ED3\u7248\u672C\uFF1A\u4FEE\u590D\u4E86\u9690\u5F0F\u5047\
+    \u8BBE\uFF0C\u89C4\u8303\u4E86 GP \u547D\u540D\uFF0C\u8865\u5168\u4E86\u4EA4\u6613\
+    \u5355\u4F4D\u3002"
+  paper: Noise traders in an agent-based artificial stock market
+  version: replication-v3-final
+noise_trader:
+  sigma_epsilon: 1.0
+preference:
+  policy: BaselineEq3Policy
+random:
+  seed: 12345
+regulation:
+  margin_trading:
+    enabled: true
+    rules: null
+  price_limit:
+    enabled: false
+    threshold: 0.1
+  settlement_cycle:
+    enabled: false
+    type: T+0
+  transaction_tax:
+    enabled: false
+    rate: 0.001
+regulation_defaults:
+  margin_trading:
+    enabled: true
+    rules: std
+  price_limit:
+    enabled: false
+    threshold: 0.1
+  settlement_cycle:
+    enabled: false
+    type: T+0
+  transaction_tax:
+    enabled: false
+    rate: 0.001
+replacement_policy:
+  mode: steady_state
+  on_bankruptcy: replace
+  replace_strategy: same_type_keep_ratios
+time:
+  periods_total: 20000
+  rounds_per_period: 50

@@ -1,11 +1,11 @@
 import numpy as np
 from typing import Dict, Any, Tuple
 
-from 论文.project.agents.base import AgentBase
-from 论文.project.agents.learning import LearningAgent
-from 论文.project.agents.noise import NoiseAgent
-from 论文.project.learning.gp.tree import GPTreeFactory
-from 论文.project.learning.evolution import EvolutionaryEngine
+from project.agents.base import AgentBase
+from project.agents.learning import LearningAgent
+from project.agents.noise import NoiseAgent
+from project.learning.gp.tree import GPTreeFactory
+from project.learning.evolution import EvolutionaryEngine
 
 
 class AgentFactory:

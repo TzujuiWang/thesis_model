@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional, NamedTuple
 from .orderbook import OrderBook, BookEntry
-from 论文.project.agents.base import Order
-from 论文.project.regulation.rules import PriceLimitRule, TransactionTaxRule
+from project.agents.base import Order
+from project.regulation.rules import PriceLimitRule, TransactionTaxRule
 
 
 class Trade(NamedTuple):

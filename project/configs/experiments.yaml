@@ -19,7 +19,7 @@ meta:
 # 全局默认（可被场景覆盖）
 # -------------------------
 defaults:
-  traders:
+  agents:
     composition:
       informed_share: 0.10
       uninformed_share: 0.90
@@ -57,52 +57,52 @@ groups:
     scenarios:
       - id: "B0"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
 
       - id: "B1"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
 
       - id: "B2"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
 
       - id: "B3"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
 
       - id: "B4"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
 
       - id: "B5"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
 
       - id: "B6"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
 
       - id: "B7"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
 
       - id: "B8"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
 
       - id: "B9"
         overrides:
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
 
   # =========
@@ -115,70 +115,70 @@ groups:
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
 
       - id: "PL1"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
 
       - id: "PL2"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
 
       - id: "PL3"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
 
       - id: "PL4"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
 
       - id: "PL5"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
 
       - id: "PL6"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
 
       - id: "PL7"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
 
       - id: "PL8"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
 
       - id: "PL9"
         overrides:
           regulation:
             price_limit: { enabled: true, threshold: 0.10 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
 
   # =========
@@ -191,70 +191,70 @@ groups:
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
 
       - id: "TT1"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
 
       - id: "TT2"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
 
       - id: "TT3"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
 
       - id: "TT4"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
 
       - id: "TT5"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
 
       - id: "TT6"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
 
       - id: "TT7"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
 
       - id: "TT8"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
 
       - id: "TT9"
         overrides:
           regulation:
             transaction_tax: { enabled: true, rate: 0.001 }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
 
   # =========
@@ -267,70 +267,70 @@ groups:
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
 
       - id: "SC1"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
 
       - id: "SC2"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
 
       - id: "SC3"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
 
       - id: "SC4"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
 
       - id: "SC5"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
 
       - id: "SC6"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
 
       - id: "SC7"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
 
       - id: "SC8"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
 
       - id: "SC9"
         overrides:
           regulation:
             settlement_cycle: { enabled: true, type: "T+1" }
-          traders:
+          agents:
             composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
 
 # -------------------------

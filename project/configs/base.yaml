@@ -30,8 +30,8 @@ assets:
     # [Source 1 Table 1] 仅写 "N(0, 0.02)"。
     # 这里的 mu_dist_param 是原始数值。
     # mu_param_type 必须显式指定为 "std" 或 "variance"，否则代码拒绝运行。
-    mu_dist_param: 0.02
-    mu_param_type: null
+    mu_dist_param: 0.07
+    mu_param_type: "std"
 
     # [Source 1] 未提及初始 D0。
     # 显式策略：steady_state_mean (D0=D_bar) 或 explicit_value
@@ -71,7 +71,7 @@ learning_gp:
   function_set:
     # [Source 1 Table 1] Explicitly listed set.
     # 注意："con" (ERC) 在此处列出，但在代码中需特殊处理，不能作为函数调用。
-    functions: [ "ifelse", "+", "-", "*", "/", "sqrt", "sin", "con", "abs" ]
+    functions: [ "ifelse", "+", "-", "*", "/", "sqrt", "sin", "cos", "con", "abs" ]
 
   terminal_set:
     # [Correction] 严格对齐 Dai Table 1。
