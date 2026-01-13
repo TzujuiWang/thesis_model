@@ -1,0 +1,166 @@
+# configs/base.yaml
+# 目的：提供复现 "Noise traders in an agent-based artificial stock market" (Dai et al., 2023) 的权威参数集。
+#
+# 引用约定：
+# [Source 1] = Dai et al. (2023) Table 1 或正文
+# [Source 2] = Yeh & Yang (2010) (仅在 Source 1 缺失时作为 fallback)
+
+meta:
+  paper: "Noise traders in an agent-based artificial stock market"
+  version: "replication-v3-final"
+  description: "冻结版本：修复了隐式假设，规范了 GP 命名，补全了交易单位。"
+
+random:
+  seed: 12345
+
+time:
+  periods_total: 20000        # [Source 1 Table 1]
+  # [Source 1] 只写 "N rounds"，未给数值。
+  # [Source 2] Table 2 明确定义 "Number of rounds for each period (NR): 50"。
+  rounds_per_period: 50
+
+assets:
+  risk_free:
+    rf: 0.0004                # [Source 1 Table 1]
+
+  risky_dividend_ar1:
+    D_bar: 0.01               # [Source 1 Table 1] (推测值)
+    rho: 0.95                 # [Source 1 Table 1]
+
+    # [Source 1 Table 1] 仅写 "N(0, 0.02)"。
+    # 这里的 mu_dist_param 是原始数值。
+    # mu_param_type 必须显式指定为 "std" 或 "variance"，否则代码拒绝运行。
+    mu_dist_param: 0.02
+    mu_param_type: null
+
+    # [Source 1] 未提及初始 D0。
+    # 显式策略：steady_state_mean (D0=D_bar) 或 explicit_value
+    initialization_policy: "steady_state_mean"
+    initial_value: null
+
+market:
+  initial_price: 25           # [Source 1 Table 1]
+  initial_best_bid: 24.75     # [Source 2] Alignment
+  initial_best_ask: 25.25     # [Source 2] Alignment
+
+  # [Source 2] 隐含假设：每次撮合的标准手数。
+  # 若未定义，财富更新和价格冲击计算将无法对齐。
+  trade_unit: 1
+
+agents:
+  population_total: 100       # [Source 1 Table 1]
+  endowment:
+    initial_bonds: 2000       # [Source 1 Table 1]
+    initial_shares: 1         # [Source 1 Table 1]
+  risk_aversion:
+    lambda: 0.5               # [Source 1 Table 1]
+
+learning_gp:
+  config:
+    rules_per_trader: 2
+    evolution_cycle: 2
+    learning_freq_range: [ 5, 95 ]
+    # [Configurable] 树的初始化与生成参数 (不再硬编码)
+    init_params:
+      method: "ramped_half_and_half" # [Source 2] Standard GP method
+      max_depth: 4              # [Source 2] Initial depth (0-indexed, so 5 levels)
+      grow_terminate_prob: 0.4  # Grow 模式下提前终止生成分支的概率
+      const_prob: 0.2           # 生成叶子时，选择常数(ERC)而非变量的概率
+      const_range: [ -10.0, 10.0 ] # ERC 取值范围
+
+  function_set:
+    # [Source 1 Table 1] Explicitly listed set.
+    # 注意："con" (ERC) 在此处列出，但在代码中需特殊处理，不能作为函数调用。
+    functions: [ "ifelse", "+", "-", "*", "/", "sqrt", "sin", "con", "abs" ]
+
+  terminal_set:
+    # [Correction] 严格对齐 Dai Table 1。
+    # 移除了 R, rf，因为论文未将其列为 Terminal。
+    # 它们应该作为 Function Set 中的 "con" (常数) 由 GP 自行进化出来，或者隐含在预测逻辑中。
+    informed:
+      - "P_t_1"
+      - "P_t_2"
+      - "P_t_3"
+      - "P_t_4"
+      - "P_t_5"
+      - "D_t"      # Informed 独有
+      - "D_t_1"
+      - "D_t_2"
+      - "D_t_3"
+      - "D_t_4"
+      - "D_t_5"
+      - "Pf_t"     # Fundamental Value
+
+    uninformed:
+      - "P_t_1"
+      - "P_t_2"
+      - "P_t_3"
+      - "P_t_4"
+      - "P_t_5"
+      - "D_t_1"    # Uninformed 只有滞后 D
+      - "D_t_2"
+      - "D_t_3"
+      - "D_t_4"
+      - "D_t_5"
+      - "Pf_t_1"   # Uninformed 只有滞后 Pf
+
+  protected_ops:
+    div_epsilon: 1e-9         # 除法保护阈值
+    sqrt_robust: true         # 负数开方取绝对值
+  evolution_probs:
+    crossover: 0.7            # [Source 1 Table 1]
+    mutation: 0.2             # [Source 1 Table 1]
+    immigration: 0.1          # [Source 1 Table 1]
+
+  selection:
+    method: "tournament"      # [Source 2 fallback]
+    tournament_size: 2        # [Source 2 fallback]
+
+beliefs:
+  theta_0: 0.2                # [Source 1 Table 1]
+
+  # [新增配置] Eq(4) 负分支的公式变体
+  # 选项:
+  #   "dai_abs_f_minus_1":  ln(|-1 + f|)  -> 严格对应 Dai et al. (2023) 文本描述
+  #   "yeh_abs_1_plus_f":   ln(|1 + f|)   -> 对应 Yeh & Yang (2010) 及一般建模直觉
+  # 默认使用 Dai 的版本以保证复现忠实度，但在调试或复现失败时可切换。
+  eq4_negative_log_variant: "dai_abs_f_minus_1"
+
+  forecasting_accuracy:
+    method: "negative_squared_error" # [Source 2 fallback]
+
+  conditional_variance:
+    method: "adaptive_variance" # [Source 2 fallback]
+    theta_1: 0.01             # [Source 2 Table 2]
+    theta_2: 0.001            # [Source 2 Table 2]
+
+noise_trader:
+  # Eq(5) belief = P_t + D_t + epsilon
+  sigma_epsilon: 1.0         #  Missing in paper, needs calibration
+
+preference:
+  policy: "BaselineEq3Policy" # 严格复现式(3)
+
+regulation_defaults:
+  price_limit:
+    enabled: false
+    threshold: 0.10           # [Source 1]
+  transaction_tax:
+    enabled: false
+    rate: 0.001               # [Source 1]
+  settlement_cycle:
+    enabled: false
+    type: "T+0"               # [Source 1] Default
+
+  margin_trading:
+    # [Source 1] 明确开启
+    enabled: true
+    rules: "std"
+
+replacement_policy:
+  mode: "steady_state"        # 4.2 默认补人
+
+logging:
+  save_trade_tape: true
+  save_wealth_snapshots: true
+  snapshot_interval: 100

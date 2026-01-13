@@ -1,0 +1,345 @@
+# configs/experiments.yaml
+# 目的：定义 Dai et al. (2023) Table 2 的实验场景矩阵（B*, PL*, TT*, SC*），并约定每个场景重复运行次数。
+#
+# 约定：
+# - informed 固定 10%（Source 1）
+# - noise 比例从 0% 到 90%（步长 10%）
+# - uninformed = 90% - noise（Source 1）
+# - policy 参数：PL=10% price limit；TT=0.1% transaction tax；SC=T+1 settlement（Source 1）
+# - 若论文未细写（如破产替换规则），按 Yeh&Yang(2010) 作为 fallback 实现（Source 2）
+
+meta:
+  version: "table2-matrix-v1"
+  runs_per_scenario: 10           # [Source 1] Each experiment repeats 10 runs then averages
+  seed_policy:
+    base_seed_from: "base.yaml:random.seed"
+    run_seed_offset: "run_index" # 实现：seed = base_seed + run_index (+ scenario_index*1000 也可)
+
+# -------------------------
+# 全局默认（可被场景覆盖）
+# -------------------------
+defaults:
+  traders:
+    composition:
+      informed_share: 0.10
+      uninformed_share: 0.90
+      noise_share: 0.00
+  regulation:
+    price_limit:
+      enabled: false
+      threshold: 0.10
+    transaction_tax:
+      enabled: false
+      rate: 0.001
+    settlement_cycle:
+      enabled: false
+      type: "T+0"
+    margin_trading:
+      enabled: true
+      rules: null               # 规则细节缺失：在代码里按“Source 1 缺失、无法从 Source 2 baseline 继承”的
+  replacement_policy:
+    # 4.2 市场影响实验：破产后补新人保持市场持续运行（Source 1）
+    # 具体“怎么补”若 Source 1 未写，按 Source 2 fallback。
+    mode: "steady_state"
+    on_bankruptcy: "replace"    # fallback: Yeh&Yang 风格（保持市场继续运行）
+    replace_strategy: "same_type_keep_ratios"  # fallback: 用同类型补回以维持配比（若你实现里选其他策略，要显式标注）
+
+# -------------------------
+# 场景分组
+# -------------------------
+groups:
+
+  # =========
+  # B*: 基准组（无监管干预）
+  # =========
+  baseline_B:
+    description: "B0-B9: baseline; noise ratio 0%..90%, no interventions"
+    scenarios:
+      - id: "B0"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
+
+      - id: "B1"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
+
+      - id: "B2"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
+
+      - id: "B3"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
+
+      - id: "B4"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
+
+      - id: "B5"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
+
+      - id: "B6"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
+
+      - id: "B7"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
+
+      - id: "B8"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
+
+      - id: "B9"
+        overrides:
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
+
+  # =========
+  # PL*: 10%涨跌停
+  # =========
+  price_limit_PL:
+    description: "PL0-PL9: 10% daily price limit; noise ratio 0%..90%"
+    scenarios:
+      - id: "PL0"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
+
+      - id: "PL1"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
+
+      - id: "PL2"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
+
+      - id: "PL3"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
+
+      - id: "PL4"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
+
+      - id: "PL5"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
+
+      - id: "PL6"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
+
+      - id: "PL7"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
+
+      - id: "PL8"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
+
+      - id: "PL9"
+        overrides:
+          regulation:
+            price_limit: { enabled: true, threshold: 0.10 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
+
+  # =========
+  # TT*: 0.1%交易税
+  # =========
+  transaction_tax_TT:
+    description: "TT0-TT9: 0.1% transaction tax; noise ratio 0%..90%"
+    scenarios:
+      - id: "TT0"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
+
+      - id: "TT1"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
+
+      - id: "TT2"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
+
+      - id: "TT3"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
+
+      - id: "TT4"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
+
+      - id: "TT5"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
+
+      - id: "TT6"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
+
+      - id: "TT7"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
+
+      - id: "TT8"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
+
+      - id: "TT9"
+        overrides:
+          regulation:
+            transaction_tax: { enabled: true, rate: 0.001 }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
+
+  # =========
+  # SC*: T+1结算
+  # =========
+  settlement_cycle_SC:
+    description: "SC0-SC9: T+1 settlement; noise ratio 0%..90%"
+    scenarios:
+      - id: "SC0"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.90, noise_share: 0.00 }
+
+      - id: "SC1"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.80, noise_share: 0.10 }
+
+      - id: "SC2"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.70, noise_share: 0.20 }
+
+      - id: "SC3"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.60, noise_share: 0.30 }
+
+      - id: "SC4"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.50, noise_share: 0.40 }
+
+      - id: "SC5"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.40, noise_share: 0.50 }
+
+      - id: "SC6"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.30, noise_share: 0.60 }
+
+      - id: "SC7"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.20, noise_share: 0.70 }
+
+      - id: "SC8"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.10, noise_share: 0.80 }
+
+      - id: "SC9"
+        overrides:
+          regulation:
+            settlement_cycle: { enabled: true, type: "T+1" }
+          traders:
+            composition: { informed_share: 0.10, uninformed_share: 0.00, noise_share: 0.90 }
+
+# -------------------------
+# 可选：生存实验（4.1）开关组
+# 说明：如果你要复现 4.1（噪声交易者生存/破产），通常需要覆盖 replacement_policy.mode
+# -------------------------
+optional_modes:
+  survival_experiment_overrides:
+    replacement_policy:
+      mode: "survival"
+      on_bankruptcy: "remove_no_replacement"   # 4.1：破产不补人（按 Source 1 叙述）
+    # 其余不变：仍使用同一套 B*/PL*/TT*/SC* 场景定义，只是替换机制不同
